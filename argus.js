@@ -1,29 +1,34 @@
-import { defineStore } from 'pinia'
+const MESSAGE_ARGUS_TOKEN_REFRESH = "argus-token-refresh";
+const MESSAGE_ARGUS_TOKEN_REQUEST = "argus-token-request";
+const MESSAGE_ARGUS_TOKEN_RESPONSE = "argus-token-response";
 
-export const useCounterStore = defineStore('aristotleStore', {
-  state: () => {
+const ArgusJS = function(token) {
+    let currentToken = token;
+
+    window.addEventListener("message", (event) => {
+        if (event.data.argusMessageId === MESSAGE_ARGUS_TOKEN_REFRESH) {
+            currentToken = event.data.token;
+        }
+    }, false);
+
     return {
-        tokens: {
-            refresh: "",
-            access: "",
-        },
-        mdr: {
-            url: "",
-        },
-        thing: "stuff",
+        token: () => currentToken,
+        get: (url) => fetch(url, { "method": "GET", "headers": { "Authorization": "Token " + currentToken } })
     }
-  }
-})
-
-export function storeTokens (mdr) {
-  let data = encodeURIComponent(JSON.stringify(mdr))
-  document.cookie = `argusapp=${data}; SameSite=Strict; Secure"`
 }
 
-export function retrieveTokens (defaultURL) {
-  const cookieValue = document.cookie.split("; ").find((row) => row.startsWith("argusapp="))?.split("=")[1];
-  if (cookieValue) {
-    return JSON.parse(decodeURIComponent(cookieValue))
-  }
-  return {"url": defaultURL}
-}
+const initArgusJS = function() {
+    return new Promise((resolve) => {
+        const requestId = Date.now();
+
+        const argusTokenResponseHandler = function(event) {
+            if (event.data.argusMessageId === MESSAGE_ARGUS_TOKEN_RESPONSE && event.data.requestId === requestId) {
+                resolve(ArgusJS(event.data.token));
+                window.removeEventListener("message", argusTokenResponseHandler)
+            }
+        }
+
+        window.addEventListener("message", argusTokenResponseHandler, false);
+        top.postMessage({ argusMessageId: MESSAGE_ARGUS_TOKEN_REQUEST, requestId })
+    })
+};
