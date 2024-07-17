@@ -2,7 +2,7 @@ const MESSAGE_ARGUS_TOKEN_REFRESH = "argus-token-refresh";
 const MESSAGE_ARGUS_TOKEN_REQUEST = "argus-token-request";
 const MESSAGE_ARGUS_TOKEN_RESPONSE = "argus-token-response";
 
-const ArgusJS = function(token) {
+const ArgusJS = function(token, mdr_url) {
     let currentToken = token;
 
     window.addEventListener("message", (event) => {
@@ -12,8 +12,13 @@ const ArgusJS = function(token) {
     }, false);
 
     return {
-        token: () => currentToken,
-        get: (url) => fetch(url, { "method": "GET", "headers": { "Authorization": "Token " + currentToken } })
+        get: (url) => fetch(`${mdr_url}${url}`, { "method": "GET", "headers": { "Authorization": "Bearer " + currentToken.access } }),
+        getById: (url, id) => fetch(`${mdr_url}${url}/${id}`, { "method": "GET", "headers": { "Authorization": "Bearer " + currentToken.access } }),
+        post: (url, data) => fetch(`${mdr_url}${url}`, { "method": "POST", "headers": { "Authorization": "Bearer " + currentToken.access }, body: JSON.stringify(data) }),
+        put: (url, id, data) => fetch(`${mdr_url}${url}/${id}`, { "method": "PUT", "headers": { "Authorization": "Bearer " + currentToken.access }, body: JSON.stringify(data) }),
+        patch: (url, id, data) => fetch(`${mdr_url}${url}/${id}`, { "method": "PATCH", "headers": { "Authorization": "Bearer " + currentToken.access }, body: JSON.stringify(data) }),
+        delete: (url, id) => fetch(`${mdr_url}${url}/${id}`, { "method": "DELETE", "headers": { "Authorization": "Bearer " + currentToken.access } }),
+        graphql: (query) => fetch(mdr_url + "/api/graphql/json", { "method": "POST", "headers": { "Accept": "application/json", "Content-Type": "application/graphql", "Authorization": "Bearer " + currentToken.access}, body: query})
     }
 }
 
@@ -29,6 +34,6 @@ const initArgusJS = function() {
         }
 
         window.addEventListener("message", argusTokenResponseHandler, false);
-        top.postMessage({ argusMessageId: MESSAGE_ARGUS_TOKEN_REQUEST, requestId })
+        top.postMessage({ argusMessageId: MESSAGE_ARGUS_TOKEN_REQUEST, requestId }, "*")
     })
 };
