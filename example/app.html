@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>App - Distributions</title>
+    <script src="/argus.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            const argusJS = await initArgusJS();
+            const response = await argusJS.get('http://localhost:8000/api/v4/metadata/distribution');
+            const responseBody = await response.json()
+
+            const conceptsUl = document.querySelector("#concepts");
+            for (const distribution of responseBody.results) {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = `http://localhost:8000/item/${distribution.id}`;
+                a.innerText = distribution.name;
+                li.appendChild(a);
+                conceptsUl.appendChild(li);
+            }
+        })
+    </script>
+</head>
+
+<body>
+    <h1>App - Distributions</h1>
+    <ul id="concepts">
+
+    </ul>
+    <a href="app-2.html">Goto Data Elements</a>
+</body>
+
+</html>

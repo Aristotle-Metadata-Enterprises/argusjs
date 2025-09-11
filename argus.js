@@ -1,29 +1,38 @@
-import { defineStore } from 'pinia'
+const MESSAGE_ARGUS_TOKEN_REFRESH = "argus-token-refresh";
+const MESSAGE_ARGUS_TOKEN_REQUEST = "argus-token-request";
+const MESSAGE_ARGUS_TOKEN_RESPONSE = "argus-token-response";
 
-export const useCounterStore = defineStore('aristotleStore', {
-  state: () => {
+const ArgusJS = function(token, mdrUrl) {
+    let currentToken = token;
+
+    window.addEventListener("message", (event) => {
+        if (event.data.argusMessageId === MESSAGE_ARGUS_TOKEN_REFRESH) {
+            currentToken = event.data.token
+        }
+    }, false);
+
     return {
-        tokens: {
-            refresh: "",
-            access: "",
-        },
-        mdr: {
-            url: "",
-        },
-        thing: "stuff",
+        get: (url) => fetch(`${mdrUrl}${url}`, { "method": "GET", "headers": { "Authorization": "Bearer " + currentToken.access } }),
+        post: (url, data) => fetch(`${mdrUrl}${url}`, { "method": "POST", "headers": { "Content-Type": "application/json; charset=UTF-8", "Authorization": "Bearer " + currentToken.access }, body: JSON.stringify(data) }),
+        put: (url, data) => fetch(`${mdrUrl}${url}`, { "method": "PUT", "headers": { "Content-Type": "application/json; charset=UTF-8", "Authorization": "Bearer " + currentToken.access }, body: JSON.stringify(data) }),
+        patch: (url, data) => fetch(`${mdrUrl}${url}`, { "method": "PATCH", "headers": { "Content-Type": "application/json; charset=UTF-8", "Authorization": "Bearer " + currentToken.access }, body: JSON.stringify(data) }),
+        delete: (url) => fetch(`${mdrUrl}${url}`, { "method": "DELETE", "headers": { "Authorization": "Bearer " + currentToken.access } }),
+        graphQL: (query) => fetch(mdrUrl + "/api/graphql/json", { "method": "POST", "headers": { "Accept": "application/json", "Content-Type": "application/graphql", "Authorization": "Bearer " + currentToken.access}, body: query})
     }
-  }
-})
-
-export function storeTokens (mdr) {
-  let data = encodeURIComponent(JSON.stringify(mdr))
-  document.cookie = `argusapp=${data}; SameSite=Strict; Secure"`
 }
 
-export function retrieveTokens (defaultURL) {
-  const cookieValue = document.cookie.split("; ").find((row) => row.startsWith("argusapp="))?.split("=")[1];
-  if (cookieValue) {
-    return JSON.parse(decodeURIComponent(cookieValue))
-  }
-  return {"url": defaultURL}
-}
+export function initArgusJS() {
+    return new Promise((resolve) => {
+        const requestId = Date.now();
+
+        const argusTokenResponseHandler = function(event) {
+            if (event.data.argusMessageId === MESSAGE_ARGUS_TOKEN_RESPONSE && event.data.requestId === requestId) {
+                resolve(ArgusJS(event.data.token, event.data.mdr_url))
+                window.removeEventListener("message", argusTokenResponseHandler)
+            }
+        }
+
+        window.addEventListener("message", argusTokenResponseHandler, false);
+        top.postMessage({ argusMessageId: MESSAGE_ARGUS_TOKEN_REQUEST, requestId }, "*")
+    })
+};
