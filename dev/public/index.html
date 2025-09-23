@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+<head>
+    <link rel="icon" type="image/png" href="/aristotle_circle_logo.png">
+    <title>manifest:name - Metadata Registry</title>
+    <link type="text/css"
+        href="/common-e8f96fcc86940145.bundle.css"
+        rel="stylesheet">
+    <style>
+        .aristotle_cloud_custom_main_page_container {
+            flex: 0 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="main navbar navbar-default my-navbar">
+        <div class="container-fluid" role="navigation">
+            <div class="navbar-header">
+                <a href="" title="Home" id="logo">
+                    <img src="/aristotle_cloud_transparent.png" alt="Logo" height="50px">
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form id="quickSearch" method="get" class="navbar-form navbar-left" role="search">
+                    <label for="quickSearchText"></label>
+                    <div class="input-group" style="position: relative;">
+                        <input type="text" class="form-control" id="quickSearchText" name="" autocomplete="off"
+                            aria-label="quickSearch" style="width: 193px;">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button" id="searchButton">
+                                <span class="glyphicon glyphicon-search"></span>&nbsp;
+                            </button>
+                        </span>
+                    </div>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="">Browse</a>
+                    </li>
+                    <li>
+                        <a href="">Help</a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="header_menu_button_user" href=""
+                            class="dropdown-toggle" data-toggle="dropdown" title="Open user menu" aria-expanded="false">
+                            <img class="profile-picture-cropped"
+                                src="/profilePicture.svg"
+                                alt="Profile Picture">
+                            User
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="header_menu_button_create" href="" accesskey="o"
+                            class="dropdown-toggle" data-toggle="dropdown" title="Create new...">
+                            <i class="fa fa-plus"></i>
+                            <span class="visible-xs-inline">Create new ... </span>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="header_menu_button_notifications" href=""
+                            class="dropdown-toggle" data-toggle="dropdown" title="Show recent notifications">
+                            <span class="fa fa-bell-o fa-fw" title="No unread notifications"></span>
+                            <span class="visible-xs-inline">No unread notifications</span>
+                            <span class="badge notify-badge">0</span>
+                        </a>
+                        <ul class="dropdown-menu notify-menu"></ul>
+                    </li>
+                    <li>
+                        <a id="header_menu_button_logout" href="" title="Log out">
+                            <i class="fa fa-sign-out fa-fw"></i>
+                            <span class="visible-xs-inline">Log out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <ul class="breadcrumb">
+        <li>
+            <a href="">Home</a>
+        </li>
+        <li>
+            <a href="">Toolbox</a>
+        </li>
+        <li>
+            manifest:name
+        </li>
+    </ul>
+
+    <iframe id="app" src="" width="100%" height="1200px" style="border: none;"></iframe>
+
+    <script>
+        const app_url = "https://aristotle-metadata-enterprises.github.io/argus-3d-graph/"
+        const mdr_url = "http://localhost:8000"
+        const token = JSON.parse('{\u0022refresh\u0022: \u0022eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1ODU4OTM4MCwiaWF0IjoxNzU4NTAyOTgwLCJqdGkiOiJiYWU1M2JjYmUyODM0ZTY4YmU2YTA1ZDYxNDk1OWQwMiIsInVzZXJfaWQiOjEsInNjb3BlIjpbIm1ldGFkYXRhOnJlYWQiLCJncmFwaHFsOnJlYWQiXX0.dViEgaCVW8QNtFxU\u002DFJDwYri\u002D8dTXETLe94PGlQ8Afo\u0022, \u0022access\u0022: \u0022eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4NTAzMjgwLCJpYXQiOjE3NTg1MDI5ODAsImp0aSI6Ijk3NTY4MzZlOTQ0ZjRhZDhiNmY5YjhmYzEzZDllOGE4IiwidXNlcl9pZCI6MSwic2NvcGUiOlsibWV0YWRhdGE6cmVhZCIsImdyYXBocWw6cmVhZCJdfQ.WhoEH1zQujVntNVCzvONDAh7ApPx8j9lZ2dSM3hcYPE\u0022}')
+
+        const postMessageToApp = (data) => {
+            document
+                .querySelector("#app")
+                .contentWindow
+                .postMessage(data, app_url)
+        }
+
+        const refreshToken = async () => {
+            const response = await fetch(
+                mdr_url + "/api/jwt/token/refresh/",
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + token.access,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ "refresh": token.refresh })
+                }
+            )
+            const newToken = await response.json()
+            token.access = newToken.access
+        }
+
+        window.setInterval(async function () {
+            // Refresh the token
+            document.querySelector("#errorMessage").style.display = 'none';
+            try {
+                await refreshToken()
+                postMessageToApp({ argusMessageId: "argus-token-refresh", token: token })
+            }
+            catch (e) {
+                document.querySelector("#errorMessage").style.display = 'block';
+                console.error("Could not connect to aristotle to reresh token", e)
+            }
+
+        }, 3 * 60 * 1000) // 3 mins
+
+        window.addEventListener("message", (event) => {
+            if (event.data.argusMessageId === "argus-token-request") {
+                postMessageToApp({
+                    argusMessageId: "argus-token-response",
+                    requestId: event.data.requestId,
+                    token,
+                    mdr_url
+                })
+            }
+        }, false)
+    </script>
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <a href="">Accessibility</a>
+                <a href="">Aristotle Metadata Academy</a>
+                <a href="">Help</a>
+            </div>
+            <span id="credit">
+                Powered by the <a href="">Aristotle Metadata Registry</a>
+            </span>
+            <div>
+                Aristotle Version x.x.x
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
