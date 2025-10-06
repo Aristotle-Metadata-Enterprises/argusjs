@@ -122,8 +122,10 @@ window.onload = async () => {
         return manifest
     })
 
-    // generate token if not provided
-    if (!currentToken) {
+    // parse token
+    if (currentToken) {
+        currentToken = JSON.parse(currentToken)
+    } else { // generate token if not provided
         currentToken = await generateToken(mdrUrl, email, password, await manifest)
     }
 
