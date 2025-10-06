@@ -7,7 +7,8 @@ const formatUrl = (url) => {
     return url
 }
 
-const generateToken = async (mdrUrl, email, password) => {
+// fetch jwt token from mdr
+const fetchToken = async (mdrUrl, email, password) => {
     const response = await fetch(
         formatUrl(mdrUrl) + "/api/jwt/token/",
         {
@@ -35,6 +36,7 @@ const generateToken = async (mdrUrl, email, password) => {
     }
 }
 
+// refresh jwt token
 const refreshToken = async (mdrUrl, token) => {
     const response = await fetch(
         formatUrl(mdrUrl) + "/api/jwt/token/refresh/",
@@ -51,40 +53,86 @@ const refreshToken = async (mdrUrl, token) => {
     return newToken
 }
 
+// fetch manifest from app
+const getManifest = async (appUrl) => {
+    const response = await fetch(formatUrl(appUrl) + "/aristotle-manifest.json", { headers: { "Content-Type": "application/json" } })
+    
+    if (response.ok) {
+        const manifest = await response.json()
+        return manifest
+    } else {
+        let errorText
+        try {
+            const errorData = await response.json()
+            errorText = errorData.detail || JSON.stringify(errorData)
+        } catch {
+            errorText = await response.text()
+        }
+        console.error(`Request failed with code ${response.status} ${response.statusText}\n${errorText}`)
+        return null
+    }
+}
+
+// add scope to token payload
+const addTokenScope = (token, scope) => {
+    // jwt token has format header.payload.signature, each encoded base64
+    const addJwtScope = (jwt) => {
+        const parts = jwt.split(".")
+        const payload = JSON.parse(atob(parts[1]))
+        payload["scope"] = scope
+        parts[1] = btoa(JSON.stringify(payload))
+        return parts.join(".")
+    }
+
+    // token is JSON object {access, refresh}, each jwt tokens
+    return { access: addJwtScope(token.access), refresh: addJwtScope(token.refresh) }
+}
+
+const generateToken = async (mdrUrl, email, password, manifest) => {
+    const token = await fetchToken(mdrUrl, email, password)
+    return addTokenScope(token, manifest.scope)
+}
+
+// post message to app's argus.js
 const postMessageToApp = (appUrl, data) => {
     document.querySelector("#app").contentWindow.postMessage(data, appUrl)
 }
 
-let argusToken = null
+let currentToken = null
 
 window.onload = async () => {
-    console.log("testing")
     const urlParams = new URLSearchParams(window.location.search)
 
     const appUrl = urlParams.get("app_url")
     const mdrUrl = urlParams.get("mdr_url")
 
-    argusToken = urlParams.get("token")
+    currentToken = urlParams.get("token")
     const email = urlParams.get("email")
     const password = urlParams.get("password")
 
     // serve the /noapp forms, which can be used to populate query fields
-    if (!appUrl || !mdrUrl || (!argusToken && (!email || !password))) {
+    if (!appUrl || !mdrUrl || (!currentToken && (!email || !password))) {
         document.querySelector("#app").src = "/noapp"
         return
     }
 
+    // get app manifest
+    const manifest = getManifest(appUrl).then(manifest => {
+        document.title = `${manifest.name} - Metadata Registry`
+        return manifest
+    })
+
     // generate token if not provided
-    if (!argusToken) {
-        argusToken = await generateToken(mdrUrl, email, password)
+    if (!currentToken) {
+        currentToken = await generateToken(mdrUrl, email, password, await manifest)
     }
 
     // refresh token every 3 mins
     window.setInterval(async () => {
         document.querySelector("#errorMessage").style.display = "none"
         try {
-            argusToken = await refreshToken(mdrUrl, argusToken)
-            postMessageToApp(appUrl, { argusMessageId: "argus-token-refresh", token: argusToken })
+            currentToken = await refreshToken(mdrUrl, currentToken)
+            postMessageToApp(appUrl, { argusMessageId: "argus-token-refresh", token: currentToken })
         } catch (e) {
             document.querySelector("#errorMessage").style.display = "block"
             console.error("Could not connect to aristotle to reresh token", e)
@@ -97,7 +145,7 @@ window.onload = async () => {
             postMessageToApp(appUrl, {
                 argusMessageId: "argus-token-response",
                 requestId: event.data.requestId,
-                token: argusToken,
+                token: currentToken,
                 mdr_url: formatUrl(mdrUrl)
             })
         }
