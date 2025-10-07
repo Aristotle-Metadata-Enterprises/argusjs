@@ -12,12 +12,7 @@
         }
 
         .content {
-            display: none;
             padding: 0;
-        }
-
-        .content.active {
-            display: initial;
         }
 
         .fa-question-circle span {
@@ -55,172 +50,59 @@
 <body>
     <div>
         <ul class="nav nav-tabs">
-            <li class="tab active" data-tab-id="by-credentials">
-                <a>Open by Credentials</a>
-            </li>
-            <li class="tab" data-tab-id="by-token">
-                <a>Open by Token</a>
-            </li>
-            <li class="tab" data-tab-id="generate-token">
-                <a>Generate Token</a>
-            </li>
+            <h4>Open by Token</h4>
         </ul>
     </div>
     <div class="border-tab-content">
-        <div id="by-credentials" class="content active">
-            <form method="GET" action="/" target="_top">
-                <label class="control-label" for="cred-app-url">App URL</label>
-                <sup><a><i class="fa fa-question-circle" title="URL pointing to the Argus app"></i></a></sup>
-                <div class="field-area">
-                    <input type="url" id="cred-app-url" name="app_url" autocomplete="app_url" required>
-                </div>
-                <br>
+        <form method="GET" action="/" target="_top">
+            <label class="control-label" for="token-app-url">App URL</label>
+            <sup><a><i class="fa fa-question-circle" title="URL pointing to the Argus app"></i></a></sup>
+            <div class="field-area">
+                <input type="url" id="token-app-url" name="app_url" autocomplete="app_url" required>
+            </div>
+            <br>
 
-                <label for="cred-mdr-url">MDR URL</label>
-                <sup><a><i class="fa fa-question-circle" title="URL pointing to the metadata registry"></i></a></sup>
-                <div class="field-area">
-                    <input type="url" id="cred-mdr-url" name="mdr_url" autocomplete="mdr_url" required>
-                </div>
-                <br>
+            <label for="token-token">API Token</label>
+            <sup><a><i class="fa fa-question-circle" title="Argus token authenticating access to the metadata registry"></i></a></sup>
+            <div class="field-area">
+                <input type="text" id="token-token" name="token" autocomplete="token" required>
+            </div>
+            <br>
 
-                <div class="inline-fields">
-                    <div>
-                        <label for="cred-email">Email</label>
-                        <!-- <sup><a><i class="fa fa-question-circle" title="Email used to log into metadata registry"></i></a></sup> -->
-                        <div class="field-area">
-                            <input type="text" id="cred-email" name="email" autocomplete="email" required>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="cred-password">Password</label>
-                        <!-- <sup><a><i class="fa fa-question-circle" title="Password used to log into metadata registry"></i></a></sup> -->
-                        <div class="field-area">
-                            <input type="password" id="cred-password" name="password" autocomplete="password" required>
-                        </div>
-                    </div>
-                </div>
-                <br>
+            <label for="token-mdr-url">MDR URL</label>
+            <sup><a><i class="fa fa-question-circle" title="URL pointing to the metadata registry"></i></a></sup>
+            <div class="field-area">
+                <input type="url" id="token-mdr-url" name="mdr_url" autocomplete="mdr_url" required>
+            </div>
+            <br>
 
-                <div class="submit-wrapper">
-                    <button class="btn btn-primary" type="submit">Open Environment</button>
-                </div>
-            </form>
-        </div>
-        <div id="by-token" class="content">
-            <form method="GET" action="/" target="_top">
-                <label class="control-label" for="token-app-url">App URL</label>
-                <sup><a><i class="fa fa-question-circle" title="URL pointing to the Argus app"></i></a></sup>
-                <div class="field-area">
-                    <input type="url" id="token-app-url" name="app_url" autocomplete="app_url" required>
-                </div>
-                <br>
-
-                <label for="token-mdr-url">MDR URL</label>
-                <sup><a><i class="fa fa-question-circle" title="URL pointing to the metadata registry"></i></a></sup>
-                <div class="field-area">
-                    <input type="url" id="token-mdr-url" name="mdr_url" autocomplete="mdr_url" required>
-                </div>
-                <br>
-
-                <label for="token-token">Argus Token</label>
-                <sup><a><i class="fa fa-question-circle" title="Argus token authenticating access to the metadata registry"></i></a></sup>
-                <div class="field-area">
-                    <input type="text" id="token-token" name="token" autocomplete="token" required>
-                </div>
-                <br>
-
-                <div class="submit-wrapper">
-                    <button class="btn btn-primary" type="submit">Open Environment</button>
-                </div>
-            </form>
-        </div>
-        <div id="generate-token" class="content">
-            <form>
-                <label for="gen-mdr-url">MDR URL</label>
-                <sup><a><i class="fa fa-question-circle" title="URL pointing to the metadata registry"></i></a></sup>
-                <div class="field-area">
-                    <input type="url" id="gen-mdr-url" name="mdr_url" autocomplete="mdr_url" required>
-                </div>
-                <br>
-
-                <div class="inline-fields">
-                    <div>
-                        <label for="gen-email">Email</label>
-                        <!-- <sup><a><i class="fa fa-question-circle" title="Email used to log into metadata registry"></i></a></sup> -->
-                        <div class="field-area">
-                            <input type="text" id="gen-email" name="email" autocomplete="email" required>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="gen-password">Password</label>
-                        <!-- <sup><a><i class="fa fa-question-circle" title="Password used to log into metadata registry"></i></a></sup> -->
-                        <div class="field-area">
-                            <input type="password" id="gen-password" name="password" autocomplete="password" required>
-                        </div>
-                    </div>
-                </div>
-                <br>
-
-                <div class="submit-wrapper">
-                    <button class="btn btn-primary" type="submit">Fetch Token</button>
-                </div>
-            </form>
-        </div>
+            <div class="submit-wrapper">
+                <button class="btn btn-default pull-left" type="button" id="token-management-btn" title="Please enter an MDR url">
+                    <i class="fa fa-external-link"></i> Token Management
+                </button>
+                <button class="btn btn-primary" type="submit">Open Environment</button>
+            </div>
+        </form>
     </div>
     <script>
-        const tabs = document.querySelectorAll(".tab")
-        const contents = document.querySelectorAll(".content")
-
-        tabs.forEach(tab => {
-            tab.addEventListener("click", () => {
-                tabs.forEach(t => t.classList.remove("active"))
-                contents.forEach(c => c.classList.remove("active"))
-
-                tab.classList.add("active")
-                document.getElementById(tab.dataset.tabId).classList.add("active")
-            })
-        })
-
-        // setup token generation
-        document.querySelector("#generate-token form").addEventListener("submit", async (event) => {
-            event.preventDefault()
-
-            const urlInput = document.querySelector("#gen-mdr-url")
-            if (!urlInput.value.startsWith("http")) {
-                urlInput.value = "http://" + urlInput.value
-            }
-            if (!urlInput.value.endsWith("/")) {
-                urlInput.value += "/"
-            }
-
-            const mdrUrl = urlInput.value
-            const email = document.querySelector("#gen-email").value
-            const password = document.querySelector("#gen-password").value
-
-            const response = await fetch(
-                mdrUrl + "api/jwt/token/",
-                {
-                    method: "POST",
-                    headers: {
-                        // "Authorization": "Bearer " + token.access,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ email, password })
+        const urlInput = document.getElementById("token-mdr-url")
+        const tokenBtn = document.getElementById("token-management-btn")
+        tokenBtn.disabled = true
+        urlInput.addEventListener("change", (event) => {
+            try {
+                const url = new URL(event.target.value)
+                tokenBtn.disabled = undefined
+                tokenBtn.title = ""
+                if (!url.href.endsWith("/")) {
+                    url.href += "/"
                 }
-            )
-
-            if (response.ok) {
-                const token = await response.json()
-                alert(`Generated API token:\n${JSON.stringify(token)}`)
-            } else {
-                let errorText
-                try {
-                    const errorData = await response.json()
-                    errorText = errorData.detail || JSON.stringify(errorData)
-                } catch {
-                    errorText = await response.text()
+                tokenBtn.onclick = () => {
+                    window.open(`${url.href}api/token/list/`, target="_blank")
                 }
-                alert(`Request failed with code ${response.status} ${response.statusText}\n${errorText}`)
+            } catch {
+                // not a valid url
+                tokenBtn.disabled = true
+                tokenBtn.title = "Please enter an MDR url"
             }
         })
     </script>
