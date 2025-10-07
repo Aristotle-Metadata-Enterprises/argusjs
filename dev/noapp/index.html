@@ -45,7 +45,6 @@
             cursor: pointer;
         }
     </style>
-    
 </head>
 <body>
     <div>
@@ -85,20 +84,25 @@
         </form>
     </div>
     <script>
+        // format url to http://x.x.x
+        const formatUrl = (url) => {
+            if (!url.startsWith("http")) {
+                url = "http://" + url
+            }
+            url = url.replace(/\/$/, "") // remove trailing slash
+            return url
+        }
+        
         const urlInput = document.getElementById("token-mdr-url")
         const tokenBtn = document.getElementById("token-management-btn")
 
         urlInput.addEventListener("change", (event) => {
             try {
                 const url = new URL(event.target.value)
+                
                 tokenBtn.disabled = undefined
                 tokenBtn.title = ""
-                if (!url.href.endsWith("/")) {
-                    url.href += "/"
-                }
-                tokenBtn.onclick = () => {
-                    window.open(`${url.href}api/token/list/`, target="_blank")
-                }
+                tokenBtn.onclick = () => window.open(`${formatUrl(url.href)}/api/token/list/`, target="_blank")
             } catch {
                 // not a valid url
                 tokenBtn.disabled = true
