@@ -28,7 +28,8 @@ const ArgusJS = function(token, mdrUrl) {
         put: (url, data) => fetch(`${mdrUrl}${url}`, { "method": "PUT", "headers": { "Content-Type": "application/json; charset=UTF-8", "Authorization": auth }, body: JSON.stringify(data) }),
         patch: (url, data) => fetch(`${mdrUrl}${url}`, { "method": "PATCH", "headers": { "Content-Type": "application/json; charset=UTF-8", "Authorization": auth }, body: JSON.stringify(data) }),
         delete: (url) => fetch(`${mdrUrl}${url}`, { "method": "DELETE", "headers": { "Authorization": auth } }),
-        graphQL: (query) => fetch(mdrUrl + "/api/graphql/json", { "method": "POST", "headers": { "Accept": "application/json", "Content-Type": "application/graphql", "Authorization": auth}, body: query})
+        graphQL: (query) => fetch(mdrUrl + "/api/graphql/json", { "method": "POST", "headers": { "Accept": "application/json", "Content-Type": "application/graphql", "Authorization": auth}, body: query}),
+        mdrUrl: () => mdrUrl
     }
 }
 
