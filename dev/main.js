@@ -37,8 +37,7 @@ window.onload = async () => {
 
     const appUrl = urlParams.get("app_url")
     const mdrUrl = urlParams.get("mdr_url")
-
-    const currentToken = urlParams.get("token")
+    const currentToken = sessionStorage.getItem("token")
 
     // serve the /noapp forms, which can be used to populate query fields
     if (!appUrl || !mdrUrl || !currentToken) {

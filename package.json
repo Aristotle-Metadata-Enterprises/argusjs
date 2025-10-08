@@ -5,7 +5,7 @@
   "main": "argus.js",
   "scripts": {
     "dev": "http-server dev/ -p 8080",
-    "example": "http-server example/ -p 8081 --cors -c-1"
+    "example": "http-server example/ -p 8081 --cors"
   },
   "repository": {
     "type": "git",
