@@ -46,10 +46,10 @@ window.onload = async () => {
         return
     }
 
-    // get app manifest
-    const manifest = getManifest(appUrl).then(manifest => {
+    // use app manifest
+    getManifest(appUrl).then(manifest => {
         document.title = `${manifest.name} - Metadata Registry`
-        return manifest
+        document.getElementById("app-name").innerText = manifest.name
     })
 
     // respond to messages with mdr url & token
