@@ -3,11 +3,18 @@
   "version": "1.0.0",
   "description": "The Aristotle App Framework",
   "main": "argus.js",
+  "scripts": {
+    "dev": "http-server dev/ -p 8080",
+    "example": "http-server example/ -p 8081 --cors -c-1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Aristotle-Metadata-Enterprises/argusjs.git"
   },
   "author": "Aristotle Metadata Enterprises",
   "license": "MIT",
-  "homepage": "https://github.com/Aristotle-Metadata-Enterprises/argusjs#readme"
+  "homepage": "https://github.com/Aristotle-Metadata-Enterprises/argusjs#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
 }

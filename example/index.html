@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+<head>
+    <script type="module" src="/argus.js"></script>
+    <script type="module">
+        import { initArgusJS } from "/argus.js"
+
+        let argusPromise = initArgusJS()
+        let nextUrl = null
+
+        const loadMore = async () => {
+            const argusJS = await argusPromise
+
+            if (nextUrl) {
+                const response = await argusJS.get(nextUrl)
+                const data = await response.json()
+                const ul = document.getElementById("oc-list")
+                for (const oc of data.results) {
+                    ul.innerHTML += `<li><a href="${argusJS.mdrUrl()}/item/${oc.id}" target="_blank">${oc.name} (id: ${oc.id})</a></li>`
+                }
+
+                if (data.next) {
+                    const next = new URL(data.next)
+                    nextUrl = next.pathname + next.search
+                } else {
+                    nextUrl = ""
+                }
+            } else {
+                document.getElementById("oc-list").innerHTML += "<li>No more models to load!</li>"
+            }
+        }
+
+        const selectModel = model => {
+            nextUrl = `/api/v4/metadata/${model}?page=1&page_size=10&fields=id,name`
+            document.getElementById("oc-list").innerHTML = ""
+        }
+
+        window.onload = () => {
+            document.getElementById("model-select").addEventListener("change", event => selectModel(event.target.value))
+            document.getElementById("load-btn").addEventListener("click", loadMore)
+
+            selectModel(document.getElementById("model-select").value)
+        }
+    </script>
+    <style>
+        div {
+            margin: auto;
+            max-width: 600px;
+            max-height: 90vh;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #eee;
+            overflow-y: scroll;
+        }
+
+        ul:empty + #status::before {
+            content: "Click \"load\" to fetch a list of models";
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h2>Load Metadata</h2>
+
+        <select id="model-select">
+            <option value="objectclass">Object Class</option>
+            <option value="property">Property</option>
+            <option value="valuedomain">Value Domain</option>
+            <option value="dataelement">Data Element</option>
+            <option value="distribution">Distribution</option>
+            <option value="dataset">Data Set</option>
+        </select>
+        <button id="load-btn">Load</button>
+        
+        <ul id="oc-list"></ul>
+        <span id="status"></span>
+    </div>
+</body>
+</html>
