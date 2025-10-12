@@ -2,7 +2,7 @@
   "name": "argusjs",
   "version": "1.0.0",
   "description": "The Aristotle App Framework",
-  "main": "argus.js",
+  "exports": "./argus.js",
   "scripts": {
     "dev": "http-server dev/ -p 8080",
     "example": "http-server example/ -p 8081 --cors"
