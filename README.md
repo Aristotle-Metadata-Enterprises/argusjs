@@ -3,11 +3,11 @@ This guide will help you develop an **Aristotle Argus App** using the Aristotle 
 
 ## Table of Contents
 
-1. Introduction
-2. ArgusJS API Documentation
-3. Creating a New App
-4. Testing Environment
-5. Example Application
+1. [Introduction](#1-introduction)
+2. [ArgusJS API Documentation](#2-argusjs-api-documentation)
+3. [Creating a New App](#3-creating-a-new-app)
+4. [Local Testing Environment](#4-local-testing-environment)
+5. [Example Application](#5-example-application)
 
 ## 1. Introduction
 
@@ -71,7 +71,7 @@ Example of `aristotle-manifest.json`:
     "scope": "metadata:read metadata:write graphql:read",
     "scope_rational": "need to have these permissions",
     "help_link": "https://labs.aristotlemetadata.com",
-    "width": "full", // can be "full" or "standard"
+    "width": "full",
     "custom_fields": [
         {
             "name": "ondc:classification-demo",
@@ -132,7 +132,7 @@ Once your app is ready, register it in the Aristotle App Store by providing a li
 
 https://help.aristotlemetadata.com/special-features/registering-an-app-using-the-app-store
 
-## 4. Testing Environment
+## 4. Local Testing Environment
 
 This package includes a local testing environment, which can be used to develop Argus apps on metadata registries without registering through a stewardship organisation.
 
