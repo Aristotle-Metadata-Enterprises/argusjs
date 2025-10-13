@@ -104,7 +104,9 @@ Include the `argus.js` file in your app’s directory. This library will handle 
 
 Alternatively, for a bundled npm project install the module:
 
-`npm install git+https://github.com/Aristotle-Metadata-Enterprises/argusjs.git`
+```bash
+npm install git+https://github.com/Aristotle-Metadata-Enterprises/argusjs.git
+```
 
 Then import it:
 
@@ -138,7 +140,9 @@ This package includes a local testing environment, which can be used to develop 
 
 To start the environment, use the command:
 
-`npm run dev`
+```bash
+npm run dev
+```
 
 This hosts a testing server at `http://localhost:8080/`. From the website you can enter an app url, metadata registry url, and API token. The app url can be local or external, and an example is provided below. This article details how to generate an API token for a metadata registry:
 
@@ -158,6 +162,8 @@ example/
 
 It can be hosted with the command:
 
-`npm run example`
+```bash
+npm run example
+```
 
 The app is hosted at `http://localhost:8081/`, and uses `argus.js` to fetch a number of metadata items from a provided registry. It can be run using the testing environment by providing its app url, as well as a registry url and API token.
