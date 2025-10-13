@@ -160,7 +160,7 @@ example/
 -  aristotle-manifest.json
 ```
 
-It can be hosted with the command:
+It is hosted with the command:
 
 ```bash
 npm run example
