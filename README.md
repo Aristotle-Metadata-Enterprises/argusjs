@@ -6,15 +6,14 @@ This guide will help you develop an **Aristotle Argus App** using the Aristotle 
 1. Introduction
 2. ArgusJS API Documentation
 3. Creating a New App
-4. Example Applications
-   1. Vanilla JavaScript Example
-   2. Vue.js Example
-   
+4. Testing Environment
+5. Example Application
+
 ## 1. Introduction
 
 As a developer, you can leverage the Aristotle API to create custom applications. By adding two key files to your application—*aristotle-manifest.json* and *argus.js*—you can transform it into an Aristotle Argus App. These apps can be registered in the Aristotle App Store using a link that points to the live hosted version of your app.
 
-### key files
+### Key Files
 
 1. aristotle-manifest.json: This file contains metadata about the app, such as its name, description, permissions, and scope.
 2. argus.js: A JavaScript library that manages authentication and allows interaction with the Aristotle API using various HTTP methods.
@@ -25,10 +24,11 @@ Once these files are integrated, the app can be registered within the Aristotle 
 
 The argus.js library provides methods for interacting with the Aristotle API and managing authentication tokens. It supports automatic token refresh and offers several HTTP methods to simplify API interactions.
 
-### Key Feature
+### Key Features
 
 * Automatic Token Management: argus.js handles JWT token refreshing, so developers don't need to manage authentication manually.
 * Support for Various HTTP Methods: ArgusJS offers GET, POST, PUT, PATCH, DELETE, and GraphQL requests.
+* Local Development Environment: apps can be tested locally using a valid API token and Metadata Registry endpoint.
 
 ### Available Methods:
 
@@ -38,6 +38,7 @@ The argus.js library provides methods for interacting with the Aristotle API and
 * patch(url, data): Sends a PATCH request with a JSON body.
 * delete(url): Sends a DELETE request to the provided URL.
 * graphQL(query): Sends a GraphQL query to the Aristotle API.
+* mdrUrl(): Returns the URL of the Metadata Registry.
 
 ### Example
 ```javascript
@@ -57,7 +58,7 @@ To develop an Aristotle Argus App, follow these steps:
 ### Step 1: Create the `aristotle-manifest.json` File
 This file defines your app’s metadata and permissions. It will be used to register your app in the **Aristotle App Store**.
 Example of `aristotle-manifest.json`:
-```
+```json
 {
     "name": "Visualisation App SO1",
     "description": "This is a visualisation app.",
@@ -82,6 +83,14 @@ Example of `aristotle-manifest.json`:
     ]
 }
 ```
+
+`scope` is a space-delimited list of permissions for your app, and controls which API endpoints are accessible by ArgusJS. The options are:
+> `graphql:read`, `metadata:read`, `metadata:write`, `search:read`, `organisation:read`, `ra:read`, `ra:write`, `wg:read`, `wg:write`, `collection:read`, `collection:write`, `link:read`, `link:write`, `issues:read`, `issues:write`, `review:read`, `review:write`, `activate:read`, `activate:write`
+
+`width` denotes the frame size of your app in Aristotle, and is either `full` or `standard`
+
+The manifest should be served as a static json file from the `/aristotle-manifest.json` endpoint of your app.
+
 ### Step 2: Add `argus.js` to Your Project
 
 Include the `argus.js` file in your app’s directory. This library will handle authentication and allow your app to communicate with the Aristotle API.
@@ -92,15 +101,23 @@ Include the `argus.js` file in your app’s directory. This library will handle 
 ```html
 <script src="/path-to-your-app/argus.js"></script>
 ```
-Alternatively, if using a JavaScript framework, import it:
+
+Alternatively, for a bundled npm project install the module:
+
+`npm install git+https://github.com/Aristotle-Metadata-Enterprises/argusjs.git`
+
+Then import it:
+
+```javascript
+import { initArgusJS } from "argusjs"
 ```
-import { initArgusJS } from './argus.js';
-```
+
+
 ### Step 3: Initialize ArgusJS
 
 To begin using the Aristotle API, initialize ArgusJS by calling initArgusJS(). This function establishes authentication and returns an instance of the ArgusJS object.
 
-```
+```javascript
 document.addEventListener("DOMContentLoaded", async function() {
     const argusJS = await initArgusJS();
     // Now ready to make API requests
@@ -109,61 +126,38 @@ document.addEventListener("DOMContentLoaded", async function() {
 ```
 ### Step 4: Develop the App
 
-### Step 5: Register the App
-Once your app is ready, register it in the Aristotle App Store by providing a link to the live app. After registration, it can be hosted within the Aristotle Registry for users to access.
+Develop your app either as a static or dynamic webpage. The page served at the root of your webpage will be embedded in the Aristotle Argus environment.
 
-here is the link to App Store help doc.
+Once your app is ready, register it in the Aristotle App Store by providing a link to the live app. After registration, it can be hosted within the Aristotle Registry for users to access. Further information can be found here:
 
-## 4. Example Applications
+https://help.aristotlemetadata.com/special-features/registering-an-app-using-the-app-store
 
-### Example 1: Vanilla JavaScript App
+## 4. Testing Environment
 
-A typical app structure might look like this:
+This package includes a local testing environment, which can be used to develop Argus apps on metadata registries without registering through a stewardship organisation.
 
+To start the environment, use the command:
+
+`npm run dev`
+
+This hosts a testing server at `http://localhost:8080/`. From the website you can enter an app url, metadata registry url, and API token. The app url can be local or external, and an example is provided below. This article details how to generate an API token for a metadata registry:
+
+https://help.aristotlemetadata.com/finding-and-viewing-metadata/generating-an-api-token
+
+With the form filled out, click "Open Environment" to open the app in the Aristotle Argus environment.
+
+## 5. Example Application
+
+An example application is included with the following project structure:
 ```
-/my-app
-  - index.html
-  - argus.js
-  - aristotle-manifest.json
-  - icon.png
+example/
+-  index.html
+-  argus.js
+-  aristotle-manifest.json
 ```
-In the index.html:
 
-```
-<head>
-  <script src="/my-app/argus.js"></script>
-</head>
-<body>
-    <script>
-        document.addEventListener("DOMContentLoaded", async function() {
-            const argusJS = await initArgusJS();
-            const response = await argusJS.get('/api/v4/metadata/distribution');
-            const data = await response.json();
-            console.log(data);
-        });
-    </script>
-</body>
+It can be hosted with the command:
 
-```
-### Example 2: Vue.js App
-In a Vue.js app, import argus.js and initialize it in the mounted lifecycle hook:
+`npm run example`
 
-```
-import { initArgusJS } from './argus.js';
-
-export default {
-  data() {
-    return {
-      argusJS: null
-    };
-  },
-  async mounted() {
-    this.argusJS = await initArgusJS();
-    const response = await this.argusJS.graphQL(`{
-    console.log(response);
-  }
-};
-
-```
-## 5. Conclusion
-By following this guide, developers can build Aristotle Argus Apps that easily integrate with the Aristotle platform. Using the `aristotle-manifest.json` and `argus.js` files, you can set up authentication, manage permissions, and start interacting with the Aristotle API right away.
+The app is hosted at `http://localhost:8081/`, and uses `argus.js` to fetch a number of metadata items from a provided registry. It can be run using the testing environment by providing its app url, as well as a registry url and API token.
