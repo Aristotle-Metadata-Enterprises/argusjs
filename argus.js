@@ -5,9 +5,15 @@ const MESSAGE_ARGUS_TOKEN_RESPONSE = "argus-token-response";
 const ArgusJS = function(token, mdrUrl) {
     let auth
     if (typeof token === "string" || token instanceof String) {
-        auth = "Token " + token // api token
+        // api token
+        auth = "Token " + token
+    } else if (token.access) {
+        // temporary access token
+        auth = "Bearer " + token.access
     } else {
-        auth = "Bearer " + token.access // access token
+        // invalid token
+        console.error(`ArgusJS received invalid token: ${token}`)
+        auth = undefined
     }
 
     window.addEventListener("message", (event) => {
@@ -16,8 +22,10 @@ const ArgusJS = function(token, mdrUrl) {
 
             if (typeof token === "string" || token instanceof String) {
                 auth = "Token " + token
-            } else {
+            } else if (token.access) {
                 auth = "Bearer " + token.access
+            } else {
+                console.error(`ArgusJS received invalid token: ${token}`)
             }
         }
     }, false);
