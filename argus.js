@@ -44,7 +44,7 @@ export function initArgusJS() {
             }
         }
 
-        window.addEventListener("message", argusTokenResponseHandler, false);
+        window.addEventListener("message", argusTokenResponseHandler, false)
         top.postMessage({ argusMessageId: MESSAGE_ARGUS_TOKEN_REQUEST, requestId }, "*")
     })
 }

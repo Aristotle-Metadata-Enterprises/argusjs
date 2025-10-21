@@ -44,6 +44,20 @@
         .tab a {
             cursor: pointer;
         }
+
+        .field-area label[for="save_token"] {
+            padding: 4px 4px 4px 3px;
+        }
+
+        .field-area label[for="save_token"] span {
+            padding: 10px;
+            font-weight: normal;
+        }
+
+        .field-area input[type="checkbox"] {
+            width: auto;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -54,10 +68,17 @@
     </div>
     <div class="border-tab-content">
         <form method="GET" action="/" target="_top" id="environment-form">
-            <label class="control-label" for="app-url">App URL</label>
+            <label class="control-label" for="app_url">App URL</label>
             <sup><a><i class="fa fa-question-circle" title="URL pointing to the Argus app"></i></a></sup>
             <div class="field-area">
-                <input type="url" id="app-url" name="app_url" autocomplete="on" required>
+                <input type="url" id="app_url" name="app_url" autocomplete="on" required>
+            </div>
+            <br>
+
+            <label for="mdr_url">MDR URL</label>
+            <sup><a><i class="fa fa-question-circle" title="URL pointing to the metadata registry"></i></a></sup>
+            <div class="field-area">
+                <input type="url" id="mdr_url" name="mdr_url" autocomplete="on" required>
             </div>
             <br>
 
@@ -65,13 +86,10 @@
             <sup><a><i class="fa fa-question-circle" title="Argus token authenticating access to the metadata registry"></i></a></sup>
             <div class="field-area">
                 <input type="text" id="token" autocomplete="on" required>
-            </div>
-            <br>
-
-            <label for="mdr-url">MDR URL</label>
-            <sup><a><i class="fa fa-question-circle" title="URL pointing to the metadata registry"></i></a></sup>
-            <div class="field-area">
-                <input type="url" id="mdr-url" name="mdr_url" autocomplete="on" required>
+                <label for="save_token">
+                    <span>Save Token in Local Storage?</span>
+                    <input type="checkbox" id="save_token" autocomplete="on">
+                </label>
             </div>
             <br>
 
@@ -86,7 +104,7 @@
     <script>
         // format url to http://x.x.x
         const formatUrl = (url) => {
-            url = url.strip()
+            url = url.trim()
             if (!url.startsWith("http")) {
                 url = "http://" + url
             }
@@ -94,23 +112,46 @@
             return url
         }
         
-        const appInput = document.getElementById("app-url")
+        const appInput = document.getElementById("app_url")
+        const mdrInput = document.getElementById("mdr_url")
         const tokenInput = document.getElementById("token")
-        const mdrInput = document.getElementById("mdr-url")
+        const saveTokenInput = document.getElementById("save_token")
         
         const tokenBtn = document.getElementById("token-management-btn")
         const envForm = document.getElementById("environment-form")
 
-        // autofill from session storage
-        appInput.value = sessionStorage.getItem("app_url") || ""
-        tokenInput.value = sessionStorage.getItem("token") || ""
-        mdrInput.value = sessionStorage.getItem("mdr_url") || ""
+        // autofill from local storage
+        appInput.value = localStorage.getItem("app_url") || ""
+        mdrInput.value = localStorage.getItem("mdr_url") || ""
+        tokenInput.value = localStorage.getItem("token") || ""
+        saveTokenInput.checked = (localStorage.getItem("save_token") == "true") || false
 
-        // save to session on form submit (accessed by _top since /noapp is same origin)
+        // save to local storage on form submit (accessed by _top since /noapp is same origin)
         envForm.addEventListener("submit", (event) => {
-            sessionStorage.setItem("app_url", event.target.app_url.value)
-            sessionStorage.setItem("token", event.target.token.value)
-            sessionStorage.setItem("mdr_url", event.target.mdr_url.value)
+            localStorage.setItem("app_url", event.target.app_url.value)
+            localStorage.setItem("save_token", event.target.save_token.checked)
+            localStorage.setItem("mdr_url", event.target.mdr_url.value)
+            
+            if (event.target.save_token.checked) {
+                localStorage.setItem("token", event.target.token.value)
+            } else {
+                localStorage.removeItem("token")
+
+                // don't redirect, send token to _top
+                event.preventDefault()
+
+                // update url with params
+                const search = window.location.search = new URLSearchParams({
+                    app_url: event.target.app_url.value,
+                    mdr_url: event.target.mdr_url.value}).toString()
+                window.history.pushState({}, window.title, `${window.location.href}?${search}`)
+
+                top.postMessage({
+                    argusMessageId: "submit-token",
+                    app_url: event.target.app_url.value,
+                    mdr_url: event.target.mdr_url.value,
+                    token: event.target.token.value }, "*")
+            }
         })
 
         mdrInput.addEventListener("change", (event) => {

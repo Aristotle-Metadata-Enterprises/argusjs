@@ -1,5 +1,6 @@
 // format url to http://x.x.x
 const formatUrl = (url) => {
+    url = url.trim()
     if (!url.startsWith("http")) {
         url = "http://" + url
     }
@@ -32,36 +33,44 @@ const postMessageToApp = (appUrl, data) => {
     document.querySelector("#app").contentWindow.postMessage(data, appUrl)
 }
 
+// embed app from appUrl and serve it the argus token on request
+const loadApp = (appUrl, mdrUrl, token) => {
+    if (!appUrl || !mdrUrl || !token) {
+        // serve the /noapp form, which can be used to populate query fields
+        window.onmessage =  (event) => {
+            if (event.data.argusMessageId === "submit-token") {
+                loadApp(event.data.app_url, event.data.mdr_url, event.data.token)
+            }
+        }
+        document.querySelector("#app").src = "/noapp"
+    } else {
+        // update site with app manifest
+        getManifest(appUrl).then(manifest => {
+            document.title = `${manifest.name} - Metadata Registry`
+            document.getElementById("app-name").innerText = manifest.name
+        })
+
+        // respond to messages with mdr url & token
+        window.onmessage = (event) => {
+            if (event.data.argusMessageId === "argus-token-request") {
+                postMessageToApp(appUrl, {
+                    argusMessageId: "argus-token-response",
+                    requestId: event.data.requestId,
+                    token: token,
+                    mdr_url: formatUrl(mdrUrl)
+                })
+            }
+        }
+        document.querySelector("#app").src = appUrl
+    }
+}
+
 window.onload = async () => {
     const urlParams = new URLSearchParams(window.location.search)
 
     const appUrl = urlParams.get("app_url")
     const mdrUrl = urlParams.get("mdr_url")
-    const currentToken = sessionStorage.getItem("token")
-
-    // serve the /noapp forms, which can be used to populate query fields
-    if (!appUrl || !mdrUrl || !currentToken) {
-        document.querySelector("#app").src = "/noapp"
-        return
-    }
-
-    // use app manifest
-    getManifest(appUrl).then(manifest => {
-        document.title = `${manifest.name} - Metadata Registry`
-        document.getElementById("app-name").innerText = manifest.name
-    })
-
-    // respond to messages with mdr url & token
-    window.addEventListener("message", (event) => {
-        if (event.data.argusMessageId === "argus-token-request") {
-            postMessageToApp(appUrl, {
-                argusMessageId: "argus-token-response",
-                requestId: event.data.requestId,
-                token: currentToken,
-                mdr_url: formatUrl(mdrUrl)
-            })
-        }
-    }, false)
-
-    document.querySelector("#app").src = appUrl
+    const token = localStorage.getItem("token")
+    
+    loadApp(appUrl, mdrUrl, token)
 }
