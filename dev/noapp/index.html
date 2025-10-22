@@ -139,13 +139,6 @@
 
                 // don't redirect, send token to _top
                 event.preventDefault()
-
-                // update url with params
-                const search = window.location.search = new URLSearchParams({
-                    app_url: event.target.app_url.value,
-                    mdr_url: event.target.mdr_url.value}).toString()
-                window.history.pushState({}, window.title, `${window.location.href}?${search}`)
-
                 top.postMessage({
                     argusMessageId: "submit-token",
                     app_url: event.target.app_url.value,

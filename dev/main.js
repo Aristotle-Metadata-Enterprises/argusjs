@@ -39,9 +39,15 @@ const loadApp = (appUrl, mdrUrl, token) => {
         // serve the /noapp form, which can be used to populate query fields
         window.onmessage =  (event) => {
             if (event.data.argusMessageId === "submit-token") {
+                // form submitted, update url params and embed new page
+                const search = new URLSearchParams({
+                    app_url: event.data.app_url,
+                    mdr_url: event.data.mdr_url}).toString()
+                window.history.pushState({}, "", `?${search}`)
                 loadApp(event.data.app_url, event.data.mdr_url, event.data.token)
             }
         }
+
         document.querySelector("#app").src = "/noapp"
     } else {
         // update site with app manifest
@@ -61,6 +67,7 @@ const loadApp = (appUrl, mdrUrl, token) => {
                 })
             }
         }
+
         document.querySelector("#app").src = appUrl
     }
 }
