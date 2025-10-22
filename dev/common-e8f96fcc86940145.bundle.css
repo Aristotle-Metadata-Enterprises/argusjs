@@ -834,8 +834,7 @@ th {
 }
 @font-face {
   font-family: "Glyphicons Halflings";
-  src: url(http://localhost:9000/bundles/glyphicons-halflings-regular-13634da87d9e23f8.eot);
-  src: url(http://localhost:9000/bundles/glyphicons-halflings-regular-13634da87d9e23f8.eot?#iefix) format("embedded-opentype"), url(http://localhost:9000/bundles/glyphicons-halflings-regular-fe185d11a4967689.woff2) format("woff2"), url(http://localhost:9000/bundles/glyphicons-halflings-regular-a26394f7ede100ca.woff) format("woff"), url(http://localhost:9000/bundles/glyphicons-halflings-regular-e395044093757d82.ttf) format("truetype"), url(http://localhost:9000/bundles/glyphicons-halflings-regular-42f60659d265c1a3.svg#glyphicons_halflingsregular) format("svg");
+  src: local(sans-serif);
 }
 .glyphicon {
   position: relative;
@@ -14524,9 +14523,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(http://localhost:9000/bundles/fa-brands-400-731b74d3d21357b6.eot);
-  src: url(http://localhost:9000/bundles/fa-brands-400-731b74d3d21357b6.eot?#iefix) format("embedded-opentype"), url(http://localhost:9000/bundles/fa-brands-400-39c658ef377f9ec3.woff2) format("woff2"), url(http://localhost:9000/bundles/fa-brands-400-2731bb668d8f6fc1.woff) format("woff"), url(http://localhost:9000/bundles/fa-brands-400-e428f5fa89da4b45.ttf) format("truetype"), url(http://localhost:9000/bundles/fa-brands-400-1f4fcb4cd8e21a3a.svg#fontawesome) format("svg"); }
-
+  src: url(/fonts/fa-brands-400.woff);
+}
 .fab {
   font-family: 'Font Awesome 5 Brands';
   font-weight: 400; }
@@ -14535,9 +14533,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url(http://localhost:9000/bundles/fa-duotone-900-571c49e5bfa1f8f6.eot);
-  src: url(http://localhost:9000/bundles/fa-duotone-900-571c49e5bfa1f8f6.eot?#iefix) format("embedded-opentype"), url(http://localhost:9000/bundles/fa-duotone-900-84f582c87b5a6f8a.woff2) format("woff2"), url(http://localhost:9000/bundles/fa-duotone-900-e8a74216b792a6ed.woff) format("woff"), url(http://localhost:9000/bundles/fa-duotone-900-5eb0df3449b8f788.ttf) format("truetype"), url(http://localhost:9000/bundles/fa-duotone-900-782ad076f0f602fc.svg#fontawesome) format("svg"); }
-
+  src: url(/fonts/fa-solid-900.woff);
+}
 .fad {
   position: relative;
   font-family: 'Font Awesome 5 Duotone';
@@ -20140,9 +20137,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 300;
   font-display: block;
-  src: url(http://localhost:9000/bundles/fa-light-300-8a6cde2bd53ff29f.eot);
-  src: url(http://localhost:9000/bundles/fa-light-300-8a6cde2bd53ff29f.eot?#iefix) format("embedded-opentype"), url(http://localhost:9000/bundles/fa-light-300-1ddc6ae069ea7aed.woff2) format("woff2"), url(http://localhost:9000/bundles/fa-light-300-c422c702b50665e6.woff) format("woff"), url(http://localhost:9000/bundles/fa-light-300-b5f9cd44c2ad5def.ttf) format("truetype"), url(http://localhost:9000/bundles/fa-light-300-964bae2c93f93353.svg#fontawesome) format("svg"); }
-
+  src: url(/fonts/fa-regular-400.woff);
+}
 .fal {
   font-family: 'Font Awesome 5 Pro';
   font-weight: 300; }
@@ -20151,8 +20147,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(http://localhost:9000/bundles/fa-regular-400-dba634574c563f1e.eot);
-  src: url(http://localhost:9000/bundles/fa-regular-400-dba634574c563f1e.eot?#iefix) format("embedded-opentype"), url(http://localhost:9000/bundles/fa-regular-400-3bbb0df89b8dbe80.woff2) format("woff2"), url(http://localhost:9000/bundles/fa-regular-400-2220595363809957.woff) format("woff"), url(http://localhost:9000/bundles/fa-regular-400-0d2ab10110edd1e3.ttf) format("truetype"), url(http://localhost:9000/bundles/fa-regular-400-76608bba802f6f84.svg#fontawesome) format("svg"); }
+  src: url(/fonts/fa-regular-400.woff);
+}
 
 .far {
   font-family: 'Font Awesome 5 Pro';
@@ -20162,8 +20158,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url(http://localhost:9000/bundles/fa-solid-900-e4ebf08bcb633e42.eot);
-  src: url(http://localhost:9000/bundles/fa-solid-900-e4ebf08bcb633e42.eot?#iefix) format("embedded-opentype"), url(http://localhost:9000/bundles/fa-solid-900-8d4d29042c23b5fc.woff2) format("woff2"), url(http://localhost:9000/bundles/fa-solid-900-3e7eb8c8d01ce020.woff) format("woff"), url(http://localhost:9000/bundles/fa-solid-900-79fc8a96e647e265.ttf) format("truetype"), url(http://localhost:9000/bundles/fa-solid-900-58b2f7fed75f690f.svg#fontawesome) format("svg"); }
+  src: url(/fonts/fa-solid-900.woff);
+}
 
 .fa,
 .fas {
