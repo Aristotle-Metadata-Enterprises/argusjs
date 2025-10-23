@@ -1,0 +1,14 @@
+{
+    "name": "Example Argus App",
+    "description": "",
+    "manifest_version": "v1.0",
+    "image": "https://aristotle-metadata-enterprises.github.io/visualisation-app/image.png",
+    "publisher": "Aristotle Metadata",
+    "publisher_email": "contact@aristotlemetadata.com",
+    "contributor": "ryschneider",
+    "code_source": "https://github.com/Aristotle-Metadata-Enterprises/aristotle-labs",
+    "scope": ["metadata:read"],
+    "scope_rational": "This app visualises data set metadata",
+    "help_link": "https://github.com/Aristotle-Metadata-Enterprises/aristotle-labs",
+    "width": "full"
+}

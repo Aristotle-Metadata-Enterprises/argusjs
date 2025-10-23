@@ -1,0 +1,130 @@
+<svg viewBox="0 0 100 100"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <style>
+    .toga { fill: #44CB63; }
+    .body { fill: white; }
+    .head { fill: white; }
+    .headshot {
+      fill: #204F89;
+      stroke: transparent;
+      stroke-width: 0;
+    }
+    #headshot-outline {
+      fill: transparent;
+      stroke: black;
+      stroke-width: 2;
+    }
+    .background { fill: transparent; }
+    .outline {
+      stroke: white;
+      stroke-width:8.5
+    }
+    .debug {
+      stroke: red;
+      fill: transparent;
+      stroke-width: 0.1;
+    }
+    .debug {
+      stroke: transparent;
+      fill: transparent;
+      stroke-width: 0;
+    }
+    .person { fill: white; }
+
+  </style>
+  <defs>
+    
+    <clipPath id="myClip">
+      <!--
+        Everything outside the circle will be
+        clipped and therefor invisible.
+      -->
+      <circle cx="50" cy="50" r="47.5" />
+    </clipPath>
+    <mask id="toga_smoother">
+      <!-- Everything under a white pixel will be visible -->
+      <rect x="0" y="0" width="100" height="100" fill="white" />
+      <polygon points="56,38 58,36.5 60,38 55.5,40.5"
+      stroke="black" fill="black"
+      />
+    </mask>
+    <g opacity="1" id="base_logo" >
+      <!-- toga right -->
+
+      <g transform="translate(-3.4 -0.4) rotate(24.6 50 50) scale(1.16,1.16)">
+      
+       <g mask="url(#toga_smoother)">
+    
+        <g id="toga_outlines">
+          <path d="M58 93 A 76 76 1 0 0 90 50" stroke="black" fill="transparent"/>
+          <!-- togo top -->
+          <path d="M90 50 C 80 40, 80 45, 57 38" stroke="black" fill="transparent"/>
+          <!-- toga left -->
+          <path d="M57 38 C 69 50, 50 69, 58 93" stroke="black" fill="transparent"/>
+        
+        
+          <!-- left shoulder stroke -->
+          <path d="M22 78 C 38 36, 48 64, 57 38" stroke="transparent" fill="transparent"/>
+        <!--<path id="shadow_override" d="M59 93 A 76 76 1 0 0 90 50" stroke="black" stroke-width="2" fill="transparent"/>-->
+        </g>
+        
+        <!-- toga -->
+        <path id="toga" class="toga" d="M58 93 A 76 76 1 0 0 90 50 C 80 40, 80 45, 57 38 C 69 50, 50 69, 58 93" stroke="transparent" />
+      
+    
+        <!-- body -->
+        <path id="body" class="body person" d="M22 78 C 38 36, 48 64, 57 38 C 69 50, 50 69, 58 93 A 38 38 0 0 1 22 78" stroke="transparent"/>
+      
+        <g id="black_outlines">
+    
+
+        </g>
+          <!-- head circle -->
+        <circle id="head" class="head person" cx="38" cy="25" r="17" stroke="black" stroke-width="2"/>
+    
+        <path id="toga_outline" d="
+          M90.7 50.7 C 80 40, 80 45, 56.5 38
+          M57 38 C 69 50, 50 69, 58 93
+          M22 78 C 38 36, 48 64, 57.5 38
+          M59 93 A 76 76 1 0 0 90 50
+          "
+          stroke="black" fill="transparent" stroke-width="2"/>
+
+
+
+        </g>
+        <path d="
+          M55.35 43 C 57.45 39, 56.3 37.88, 62 39.53
+          "
+          stroke="black" fill="transparent" stroke-width="2"/>
+      </g>
+    </g>
+
+  </defs>
+
+  <rect class="background" width="100%" height="100%"/>
+  
+
+
+  <circle id="headshot" class="headshot" cx="50" cy="50" r="48"/>
+  <use clip-path="url(#myClip)" xlink:href="#base_logo"/>
+  <circle id="headshot-outline" cx="50" cy="50" r="47.5"/>
+
+<!-- stroke="#4e8382" -->
+  <line x1="0" x2="100" y1="0" y2="100" class="debug"/>
+  <line x1="100" x2="0" y1="0" y2="100" class="debug"/>
+
+  <line x1="50" x2="50" y1="0" y2="100" class="debug"/>
+  <line y1="50" y2="50" x1="0" x2="100" class="debug"/>
+
+  <line y1="49" y2="49" x1="0" x2="100" class="debug"/>
+  <line y1="51" y2="51" x1="0" x2="100" class="debug"/>
+  <line y1="50" y2="50" x1="0" x2="100" class="debug"/>
+
+  <line y1="75" y2="75" x1="0" x2="100" class="debug"/>
+
+  <circle cx="50" cy="28" r="20.9" class="debug" fill="transparent" />
+
+</svg>

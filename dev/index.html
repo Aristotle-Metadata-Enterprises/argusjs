@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+<head>
+    <link rel="icon" type="image/png" href="/aristotle_circle_logo.png">
+    <title>manifest:name - Metadata Registry</title>
+    <link type="text/css" href="/common-e8f96fcc86940145.bundle.css" rel="stylesheet">
+    <style>
+        .aristotle_cloud_custom_main_page_container {
+            flex: 0 0 auto;
+        }
+    </style>
+    <script src="/main.js"></script>
+</head>
+<body>
+    <nav class="main navbar navbar-default my-navbar">
+        <div class="container-fluid" role="navigation">
+            <div class="navbar-header">
+                <a href="/" title="Home" id="logo">
+                    <img src="/aristotle_cloud_transparent.png" alt="Logo" height="50px">
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form id="quickSearch" method="get" class="navbar-form navbar-left" role="search">
+                    <label for="quickSearchText"></label>
+                    <div class="input-group" style="position: relative;">
+                        <input type="text" class="form-control" id="quickSearchText" name="" autocomplete="off"
+                            aria-label="quickSearch" style="width: 193px;">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button" id="searchButton">
+                                <span class="glyphicon glyphicon-search"></span>&nbsp;
+                            </button>
+                        </span>
+                    </div>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="javascript:void(0);">Browse</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">Help</a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="header_menu_button_user" href="javascript:void(0);"
+                            class="dropdown-toggle" data-toggle="dropdown" title="Open user menu" aria-expanded="false">
+                            <img class="profile-picture-cropped"
+                                src="/profilePicture.svg"
+                                alt="Profile Picture">
+                            User
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="header_menu_button_create" href="javascript:void(0);" accesskey="o"
+                            class="dropdown-toggle" data-toggle="dropdown" title="Create new...">
+                            <i class="fa fa-plus"></i>
+                            <span class="visible-xs-inline">Create new ... </span>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="header_menu_button_notifications" href="javascript:void(0);"
+                            class="dropdown-toggle" data-toggle="dropdown" title="Show recent notifications">
+                            <span class="fa fa-bell-o fa-fw" title="No unread notifications"></span>
+                            <span class="visible-xs-inline">No unread notifications</span>
+                            <span class="badge notify-badge">0</span>
+                        </a>
+                        <ul class="dropdown-menu notify-menu"></ul>
+                    </li>
+                    <li>
+                        <a id="header_menu_button_logout" href="javascript:void(0);" title="Log out">
+                            <i class="fa fa-sign-out fa-fw"></i>
+                            <span class="visible-xs-inline">Log out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <ul class="breadcrumb">
+        <li>
+            <a href="/">Home</a>
+        </li>
+        <li>
+            <a href="/">Toolbox</a>
+        </li>
+        <li id="app-name">manifest:name</li>
+    </ul>
+    <div id="errorMessage" style="display: none">
+        Could not connect to Aristotle, will try again in 3 minutes...
+    </div>
+    <iframe id="app" src="" width="100%" height="1200px" style="border: none;"></iframe>
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <a href="javascript:void(0);">Accessibility</a>
+                <a href="javascript:void(0);">Aristotle Metadata Academy</a>
+                <a href="javascript:void(0);">Help</a>
+            </div>
+            <span id="credit">
+                Powered by the <a href="javascript:void(0);">Aristotle Metadata Registry</a>
+            </span>
+            <div>
+                Aristotle Version x.x.x
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
