@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "http-server dev/ -p 8080",
     "example": "http-server example/ -p 8081 --cors",
-    "test": "vitest"
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   "license": "MIT",
   "homepage": "https://github.com/Aristotle-Metadata-Enterprises/argusjs#readme",
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.5",
     "http-server": "^14.1.1",
     "jsdom": "^27.0.1",
     "vitest": "^4.0.2"
