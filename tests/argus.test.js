@@ -164,4 +164,6 @@ test("Test ArgusJS checks request ID", async () => {
 
     // check argus is set up correctly
     await testMethods(argus, mdrUrl, auth)
+
+    expect("a").toBe("b")
 }, 1000)
