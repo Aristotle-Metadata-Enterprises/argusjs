@@ -1,3 +1,6 @@
+![Tests](https://github.com/Aristotle-Metadata-Enterprises/argusjs/actions/workflows/javascript.yaml/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/Aristotle-Metadata-Enterprises/argusjs/badge.svg?branch=master)](https://coveralls.io/github/Aristotle-Metadata-Enterprises/argusjs?branch=master)
+
 # Developer Documentation for Aristotle Argus Apps
 This guide will help you develop an **Aristotle Argus App** using the Aristotle API, argus.js library, and aristotle-manifest.json. By integrating these components into your app, you can create an application that is registerable in the **Aristotle App Store** and usable within the **Aristotle Registry**.
 

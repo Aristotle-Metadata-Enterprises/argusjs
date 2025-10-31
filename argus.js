@@ -3,29 +3,20 @@ const MESSAGE_ARGUS_TOKEN_REQUEST = "argus-token-request";
 const MESSAGE_ARGUS_TOKEN_RESPONSE = "argus-token-response";
 
 const ArgusJS = function(token, mdrUrl) {
-    let auth
+    let auth = undefined
     if (typeof token === "string" || token instanceof String) {
         // api token
-        auth = "Token " + token
+        auth = `Token ${token}`
     } else if (token.access) {
         // temporary access token
-        auth = "Bearer " + token.access
-    } else {
-        // invalid token
-        console.error(`ArgusJS received invalid token: ${token}`)
-        auth = undefined
+        auth = `Bearer ${token.access}`
     }
 
     window.addEventListener("message", (event) => {
         if (event.data.argusMessageId === MESSAGE_ARGUS_TOKEN_REFRESH) {
             const token = event.data.token
-
-            if (typeof token === "string" || token instanceof String) {
-                auth = "Token " + token
-            } else if (token.access) {
-                auth = "Bearer " + token.access
-            } else {
-                console.error(`ArgusJS received invalid token: ${token}`)
+            if (token) {
+                auth = `Bearer ${token.access}`
             }
         }
     }, false);
@@ -36,14 +27,14 @@ const ArgusJS = function(token, mdrUrl) {
         put: (url, data) => fetch(`${mdrUrl}${url}`, { "method": "PUT", "headers": { "Content-Type": "application/json; charset=UTF-8", "Authorization": auth }, body: JSON.stringify(data) }),
         patch: (url, data) => fetch(`${mdrUrl}${url}`, { "method": "PATCH", "headers": { "Content-Type": "application/json; charset=UTF-8", "Authorization": auth }, body: JSON.stringify(data) }),
         delete: (url) => fetch(`${mdrUrl}${url}`, { "method": "DELETE", "headers": { "Authorization": auth } }),
-        graphQL: (query) => fetch(mdrUrl + "/api/graphql/json", { "method": "POST", "headers": { "Accept": "application/json", "Content-Type": "application/graphql", "Authorization": auth}, body: query}),
+        graphQL: (query) => fetch(`${mdrUrl}/api/graphql/json`, { "method": "POST", "headers": { "Accept": "application/json", "Content-Type": "application/graphql", "Authorization": auth}, body: query}),
         mdrUrl: () => mdrUrl
     }
 }
 
 export function initArgusJS() {
     return new Promise((resolve) => {
-        const requestId = Date.now();
+        const requestId = Date.now()
 
         const argusTokenResponseHandler = function(event) {
             if (event.data.argusMessageId === MESSAGE_ARGUS_TOKEN_RESPONSE && event.data.requestId === requestId) {

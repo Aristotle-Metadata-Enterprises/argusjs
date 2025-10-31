@@ -2,10 +2,13 @@
   "name": "argusjs",
   "version": "1.0.0",
   "description": "The Aristotle App Framework",
+  "type": "module",
   "exports": "./argus.js",
   "scripts": {
     "dev": "http-server dev/ -p 8080",
-    "example": "http-server example/ -p 8081 --cors"
+    "example": "http-server example/ -p 8081 --cors",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "repository": {
     "type": "git",
@@ -15,6 +18,9 @@
   "license": "MIT",
   "homepage": "https://github.com/Aristotle-Metadata-Enterprises/argusjs#readme",
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "@vitest/coverage-v8": "^4.0.5",
+    "http-server": "^14.1.1",
+    "jsdom": "^27.0.1",
+    "vitest": "^4.0.2"
   }
 }
