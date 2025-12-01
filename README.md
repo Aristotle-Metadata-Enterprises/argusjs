@@ -71,7 +71,7 @@ Example of `aristotle-manifest.json`:
     "publisher": "Aristotle Metadata",
     "publisher_email": "contact@aristotlemetadata.com",
     "contributor": "some devs from Aristotle",
-    "code_source": "https://github/somewhere",
+    "code_source": "https://github.com/somewhere",
     "scope": "metadata:read metadata:write graphql:read",
     "scope_rational": "need to have these permissions",
     "help_link": "https://labs.aristotlemetadata.com",
@@ -109,7 +109,7 @@ Include the `argus.js` file in your app’s directory. This library will handle 
 Alternatively, for a bundled npm project install the module:
 
 ```bash
-npm install git+https://github.com/Aristotle-Metadata-Enterprises/argusjs.git
+npm install argusjs
 ```
 
 Then import it:
