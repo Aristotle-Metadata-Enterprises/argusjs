@@ -1,3 +1,4 @@
+[![NPM Version](https://img.shields.io/npm/v/argusjs.svg)](https://www.npmjs.com/package/argusjs)
 ![Tests](https://github.com/Aristotle-Metadata-Enterprises/argusjs/actions/workflows/javascript.yaml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/Aristotle-Metadata-Enterprises/argusjs/badge.svg?branch=master)](https://coveralls.io/github/Aristotle-Metadata-Enterprises/argusjs?branch=master)
 
