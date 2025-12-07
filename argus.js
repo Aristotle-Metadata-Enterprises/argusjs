@@ -2,7 +2,7 @@ const MESSAGE_ARGUS_TOKEN_REFRESH = "argus-token-refresh";
 const MESSAGE_ARGUS_TOKEN_REQUEST = "argus-token-request";
 const MESSAGE_ARGUS_TOKEN_RESPONSE = "argus-token-response";
 
-const ArgusJS = function(token, mdrUrl) {
+const ArgusJS = function(token, mdrUrl, stewardshipOrganisation) {
     let auth = undefined
     if (typeof token === "string" || token instanceof String) {
         // api token
@@ -28,7 +28,8 @@ const ArgusJS = function(token, mdrUrl) {
         patch: (url, data) => fetch(`${mdrUrl}${url}`, { "method": "PATCH", "headers": { "Content-Type": "application/json; charset=UTF-8", "Authorization": auth }, body: JSON.stringify(data) }),
         delete: (url) => fetch(`${mdrUrl}${url}`, { "method": "DELETE", "headers": { "Authorization": auth } }),
         graphQL: (query) => fetch(`${mdrUrl}/api/graphql/json`, { "method": "POST", "headers": { "Accept": "application/json", "Content-Type": "application/graphql", "Authorization": auth}, body: query}),
-        mdrUrl: () => mdrUrl
+        mdrUrl: () => mdrUrl,
+        stewardshipOrganisation: () => stewardshipOrganisation
     }
 }
 
@@ -38,7 +39,7 @@ export function initArgusJS() {
 
         const argusTokenResponseHandler = function(event) {
             if (event.data.argusMessageId === MESSAGE_ARGUS_TOKEN_RESPONSE && event.data.requestId === requestId) {
-                resolve(ArgusJS(event.data.token, event.data.mdr_url))
+                resolve(ArgusJS(event.data.token, event.data.mdr_url, event.data.stewardship_organisation))
                 window.removeEventListener("message", argusTokenResponseHandler)
             }
         }
