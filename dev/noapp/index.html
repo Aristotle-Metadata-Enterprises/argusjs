@@ -159,7 +159,7 @@
             }
         })
 
-        mdrInput.addEventListener("change", (event) => {
+        mdrInput.addEventListener("input", (event) => {
             try {
                 const url = new URL(event.target.value)
                 tokenBtn.disabled = undefined
