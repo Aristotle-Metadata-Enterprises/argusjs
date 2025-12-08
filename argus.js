@@ -19,7 +19,11 @@ const ArgusJS = function(token, mdrUrl, stewardshipOrganisation) {
                 auth = `Bearer ${token.access}`
             }
         }
-    }, false);
+    }, false)
+
+    if (!stewardshipOrganisation || stewardshipOrganisation == "") {
+        stewardshipOrganisation = null
+    }
 
     return {
         get: (url) => fetch(`${mdrUrl}${url}`, { "method": "GET", "headers": { "Authorization": auth } }),

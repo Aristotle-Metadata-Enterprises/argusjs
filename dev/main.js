@@ -34,7 +34,7 @@ const postMessageToApp = (appUrl, data) => {
 }
 
 // embed app from appUrl and serve it the argus token on request
-const loadApp = (appUrl, mdrUrl, token) => {
+const loadApp = (appUrl, mdrUrl, token, stewardshipOrganisation) => {
     if (!appUrl || !mdrUrl || !token) {
         // serve the /noapp form, which can be used to populate query fields
         window.onmessage =  (event) => {
@@ -42,9 +42,11 @@ const loadApp = (appUrl, mdrUrl, token) => {
                 // form submitted, update url params and embed new page
                 const search = new URLSearchParams({
                     app_url: event.data.app_url,
-                    mdr_url: event.data.mdr_url}).toString()
+                    mdr_url: event.data.mdr_url,
+                    stewardship_organisation: event.data.stewardship_organisation
+                }).toString()
                 window.history.pushState({}, "", `?${search}`)
-                loadApp(event.data.app_url, event.data.mdr_url, event.data.token)
+                loadApp(event.data.app_url, event.data.mdr_url, event.data.token, event.data.stewardship_organisation)
             }
         }
 
@@ -63,7 +65,8 @@ const loadApp = (appUrl, mdrUrl, token) => {
                     argusMessageId: "argus-token-response",
                     requestId: event.data.requestId,
                     token: token,
-                    mdr_url: formatUrl(mdrUrl)
+                    mdr_url: formatUrl(mdrUrl),
+                    stewardship_organisation: stewardshipOrganisation
                 })
             }
         }
@@ -77,7 +80,8 @@ window.onload = async () => {
 
     const appUrl = urlParams.get("app_url")
     const mdrUrl = urlParams.get("mdr_url")
+    const stewardshipOrganisation = urlParams.get("stewardship_organisation") || ""
     const token = localStorage.getItem("token")
     
-    loadApp(appUrl, mdrUrl, token)
+    loadApp(appUrl, mdrUrl, token, stewardshipOrganisation)
 }
