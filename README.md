@@ -43,6 +43,7 @@ The argus.js library provides methods for interacting with the Aristotle API and
 * delete(url): Sends a DELETE request to the provided URL.
 * graphQL(query): Sends a GraphQL query to the Aristotle API.
 * mdrUrl(): Returns the URL of the Metadata Registry.
+* stewardshipOrganisation(): Returns the UUID of the app's stewardship organisation.
 
 ### Example
 ```javascript
