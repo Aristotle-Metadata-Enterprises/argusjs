@@ -82,6 +82,13 @@
             </div>
             <br>
 
+            <label for="stewardship_organisation">Stewardship Organistaion UUID</label>
+            <sup><a><i class="fa fa-question-circle" title="Leave blank if not sure"></i></a></sup>
+            <div class="field-area">
+                <input type="text" id="stewardship_organisation" name="stewardship_organisation" autocomplete="on">
+            </div>
+            <br>
+
             <label for="token">API Token</label>
             <sup><a><i class="fa fa-question-circle" title="Argus token authenticating access to the metadata registry"></i></a></sup>
             <div class="field-area">
@@ -114,6 +121,7 @@
         
         const appInput = document.getElementById("app_url")
         const mdrInput = document.getElementById("mdr_url")
+        const soInput = document.getElementById("stewardship_organisation")
         const tokenInput = document.getElementById("token")
         const saveTokenInput = document.getElementById("save_token")
         
@@ -123,6 +131,7 @@
         // autofill from local storage
         appInput.value = localStorage.getItem("app_url") || ""
         mdrInput.value = localStorage.getItem("mdr_url") || ""
+        soInput.value = localStorage.getItem("stewardship_organisation") || ""
         tokenInput.value = localStorage.getItem("token") || ""
         saveTokenInput.checked = (localStorage.getItem("save_token") == "true") || false
 
@@ -131,6 +140,7 @@
             localStorage.setItem("app_url", event.target.app_url.value)
             localStorage.setItem("save_token", event.target.save_token.checked)
             localStorage.setItem("mdr_url", event.target.mdr_url.value)
+            localStorage.setItem("stewardship_organisation", event.target.stewardship_organisation.value.trim())
             
             if (event.target.save_token.checked) {
                 localStorage.setItem("token", event.target.token.value)
@@ -143,11 +153,13 @@
                     argusMessageId: "submit-token",
                     app_url: event.target.app_url.value,
                     mdr_url: event.target.mdr_url.value,
-                    token: event.target.token.value }, "*")
+                    stewardship_organisation: event.target.stewardship_organisation.value.trim(),
+                    token: event.target.token.value,
+                }, "*")
             }
         })
 
-        mdrInput.addEventListener("change", (event) => {
+        mdrInput.addEventListener("input", (event) => {
             try {
                 const url = new URL(event.target.value)
                 tokenBtn.disabled = undefined

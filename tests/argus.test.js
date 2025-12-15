@@ -17,7 +17,7 @@ beforeEach(() => {
     vi.stubGlobal("fetch", FetchMock)
 })
 
-const setupArgus = async (mdrUrl, token) => {
+const setupArgus = async (mdrUrl, soUuid, token) => {
     // initialise argus
     const argusPromise = initArgusJS()
 
@@ -34,7 +34,8 @@ const setupArgus = async (mdrUrl, token) => {
             argusMessageId: "argus-token-response",
             requestId: requestMsg.requestId,
             token: token,
-            mdr_url: mdrUrl
+            mdr_url: mdrUrl,
+            stewardship_organisation: soUuid
         }
     })
     window.dispatchEvent(responseMsg)
@@ -45,7 +46,7 @@ const setupArgus = async (mdrUrl, token) => {
     return argus
 }
 
-const testMethods = async (argus, mdrUrl, auth) => {
+const testMethods = async (argus, mdrUrl, soUuid, auth) => {
     for (const method of ["get", "post", "put", "patch", "delete", "graphQL"]) {
         FetchMock.mockReset()
         const response = await argus[method]("")
@@ -60,27 +61,30 @@ const testMethods = async (argus, mdrUrl, auth) => {
     }
 
     expect(argus.mdrUrl()).toBe(mdrUrl)
+    expect(argus.stewardshipOrganisation()).toBe(soUuid)
 }
 
 test("Test ArgusJS with API token", async () => {
     const mdrUrl = "https://www.mymetadataregistry.com"
+    const soUuid = "88888888-4444-4444-4444-cccccccccccc"
     const token = "0123456789abcdef0123456789abcdef01234567"
     const auth = `Token ${token}` // api token auth
 
-    const argus = await setupArgus(mdrUrl, token)
-    await testMethods(argus, mdrUrl, auth)
+    const argus = await setupArgus(mdrUrl, soUuid, token)
+    await testMethods(argus, mdrUrl, soUuid, auth)
 }, 1000)
 
 test("Test ArgusJS with access token", async () => {
     const mdrUrl = "https://www.yourmetadataregistry.com"
+    const soUuid = "88888888-4444-1111-4444-cccccccccccc"
     const token = {
         access: "1111111111111111111111111111111111111111",
         refresh: "ffffffffffffffffffffffffffffffffffffffff"
     }
     const auth = `Bearer ${token.access}` // access token auth
 
-    const argus = await setupArgus(mdrUrl, token)
-    await testMethods(argus, mdrUrl, auth)
+    const argus = await setupArgus(mdrUrl, soUuid, token)
+    await testMethods(argus, mdrUrl, soUuid, auth)
 
     // refresh token
     const newToken = {
@@ -97,29 +101,42 @@ test("Test ArgusJS with access token", async () => {
     })
     window.dispatchEvent(refreshMsg)
 
-    await testMethods(argus, mdrUrl, newAuth)
+    await testMethods(argus, mdrUrl, soUuid, newAuth)
 }, 1000)
 
 test("Test ArgusJS with incorrect API token", async () => {
     const mdrUrl = "https://www.ourmetadataregistry.com"
+    const soUuid = "88888888-4444-2222-4444-cccccccccccc"
     const token = "0123456789abcdef0123456789abcdef01234567"
     const auth = `Token ${token}` // api token auth
 
-    const argus = await setupArgus(mdrUrl, "notmytoken")
-    await expect(testMethods(argus, mdrUrl, auth)).rejects.toThrowError()
+    const argus = await setupArgus(mdrUrl, soUuid, "notmytoken")
+    await expect(testMethods(argus, mdrUrl, soUuid, auth)).rejects.toThrowError()
 }, 1000)
 
 test("Test ArgusJS with incorrect mdr url", async () => {
     const mdrUrl = "https://www.somemetadataregistry.com"
+    const soUuid = "88888888-4444-3333-4444-cccccccccccc"
     const token = "0123456789abcdef0123456789abcdef01234567"
     const auth = `Token ${token}` // api token auth
 
-    const argus = await setupArgus("https://not.my.url", token)
-    await expect(testMethods(argus, mdrUrl, auth)).rejects.toThrowError()
+    const argus = await setupArgus("https://not.my.url", soUuid, token)
+    await expect(testMethods(argus, mdrUrl, soUuid, auth)).rejects.toThrowError()
+}, 1000)
+
+test("Test ArgusJS with no stewardship organisation", async () => {
+    const mdrUrl = "https://www.somemetadataregistry.com"
+    const soUuid = ""
+    const token = "0123456789abcdef0123456789abcdef01234567"
+    const auth = `Token ${token}` // api token auth
+
+    const argus = await setupArgus(mdrUrl, soUuid, token)
+    expect(argus.stewardshipOrganisation()).toBe(null)
 }, 1000)
 
 test("Test ArgusJS checks request ID", async () => {
     const mdrUrl = "https://www.anothermetadataregistry.com"
+    const soUuid = "88888888-4444-5555-4444-cccccccccccc"
     const token = "0123456789abcdef0123456789abcdef01234567"
     const auth = `Token ${token}` // api token auth
 
@@ -139,7 +156,8 @@ test("Test ArgusJS checks request ID", async () => {
             argusMessageId: "argus-token-response",
             requestId: `${requestMsg.requestId}1`,
             token: "notmytoken",
-            mdr_url: "https://not.my.url"
+            mdr_url: "https://not.my.url",
+            stewardship_organisation: soUuid
         }
     })
     window.dispatchEvent(wrongResponseMsg)
@@ -154,7 +172,8 @@ test("Test ArgusJS checks request ID", async () => {
             argusMessageId: "argus-token-response",
             requestId: requestMsg.requestId,
             token: token,
-            mdr_url: mdrUrl
+            mdr_url: mdrUrl,
+            stewardship_organisation: soUuid
         }
     })
     window.dispatchEvent(responseMsg)
@@ -163,5 +182,5 @@ test("Test ArgusJS checks request ID", async () => {
     expect(argus).toBeDefined()
 
     // check argus is set up correctly
-    await testMethods(argus, mdrUrl, auth)
+    await testMethods(argus, mdrUrl, soUuid, auth)
 }, 1000)

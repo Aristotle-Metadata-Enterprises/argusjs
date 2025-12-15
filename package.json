@@ -1,11 +1,11 @@
 {
   "name": "argusjs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The Aristotle App Framework",
   "type": "module",
   "exports": "./argus.js",
   "scripts": {
-    "dev": "http-server dev/ -p 8080",
+    "dev": "http-server dev/ -p 8080 --cors",
     "example": "http-server example/ -p 8081 --cors",
     "test": "vitest",
     "test:coverage": "vitest --coverage"
