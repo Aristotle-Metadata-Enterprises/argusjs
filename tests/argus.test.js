@@ -124,6 +124,16 @@ test("Test ArgusJS with incorrect mdr url", async () => {
     await expect(testMethods(argus, mdrUrl, soUuid, auth)).rejects.toThrowError()
 }, 1000)
 
+test("Test ArgusJS with no stewardship organisation", async () => {
+    const mdrUrl = "https://www.somemetadataregistry.com"
+    const soUuid = ""
+    const token = "0123456789abcdef0123456789abcdef01234567"
+    const auth = `Token ${token}` // api token auth
+
+    const argus = await setupArgus(mdrUrl, soUuid, token)
+    expect(argus.stewardshipOrganisation()).toBe(null)
+}, 1000)
+
 test("Test ArgusJS checks request ID", async () => {
     const mdrUrl = "https://www.anothermetadataregistry.com"
     const soUuid = "88888888-4444-5555-4444-cccccccccccc"
